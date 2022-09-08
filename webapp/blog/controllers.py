@@ -53,7 +53,7 @@ def refresh():
         post.photo = photo
         post.seller = item['user']['name']
 
-        ids.push(item['id'])
+        ids.append(item['id'])
         post_data.append(post)
 
     db.session.bulk_save_objects(post_data)
