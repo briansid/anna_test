@@ -36,8 +36,13 @@ def refresh():
     data = parser.main(limit)
     Post.query.delete()
 
+    ids = []
+
     post_data = []
     for item in data:
+        if item['id'] in ids:
+            continue
+
         param = item['params'][0]['value'] if item['params'] else None
         photo = item['photos'][0]['link'] if item['photos'] else None
 
@@ -48,6 +53,7 @@ def refresh():
         post.photo = photo
         post.seller = item['user']['name']
 
+        ids.push(item['id'])
         post_data.append(post)
 
     db.session.bulk_save_objects(post_data)
