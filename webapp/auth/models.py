@@ -11,7 +11,7 @@ roles = db.Table(
 class User(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     username = db.Column(db.String(255), nullable=False, index=True, unique=True)
-    password = db.Column(db.LargeBinary(60), nullable=False)
+    password = db.Column(db.LargeBinary(60))
 
     roles = db.relationship(
         'Role',

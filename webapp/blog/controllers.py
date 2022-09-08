@@ -8,7 +8,7 @@ blog_blueprint = Blueprint(
     'blog',
     __name__,
     template_folder='../templates/blog',
-    url_prefix="/blog"
+    url_prefix="/olx"
 )
 
 
