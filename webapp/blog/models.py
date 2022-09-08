@@ -15,7 +15,7 @@ class Serializer(object):
 
 class Post(db.Model, Serializer):
     id = db.Column(db.Integer(), primary_key=True)
-    olx_id = db.Column(db.Integer(), nullable=False, unique=True, index=True)
+    olx_id = db.Column(db.Integer(), nullable=False, index=True)
     title = db.Column(db.String(255))
     price = db.Column(db.Integer())
     photo = db.Column(db.String(255))
