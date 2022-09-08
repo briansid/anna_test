@@ -11,7 +11,7 @@ def crawl(url, results):
 def main(limit):
     print(limit)
     url = 'https://www.olx.ua/api/v1/offers/?offset={offset}&limit=50&category_id=65'
-    urls = [url.format(offset=o) for o in range(0, limit, 50)]
+    urls = [url.format(offset=o) for o in range(0, limit, 64)]
     results = []
     threads = []
 
