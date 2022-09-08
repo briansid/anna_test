@@ -11,7 +11,7 @@ roles = db.Table(
 class User(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     username = db.Column(db.String(255), nullable=False, index=True, unique=True)
-    password = db.Column(db.String(255))
+    password = db.Column(db.LargeBinary(60), nullable=False)
 
     roles = db.relationship(
         'Role',
@@ -34,7 +34,7 @@ class User(db.Model):
         return False
 
     def set_password(self, password):
-        self.password = bcrypt.generate_password_hash(password).decode('utf8')
+        self.password = bcrypt.generate_password_hash(password)
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
