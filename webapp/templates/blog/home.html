@@ -1,0 +1,98 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block body %}
+<div id="app">
+  <div v-if="data">
+    <div>
+      <a @click="sort_posts" style="cursor: pointer"
+        >Сортировать по цене <span v-if="order==='asc'">&darr;</span
+        ><span v-else-if="order==='desc'">&uarr;</span></a
+      >
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-sm-6" v-for="item in items" :key="item.id">
+        <div class="card">
+          <img class="card-img-top" :src="item.photo" alt="Card image cap" />
+          <div class="card-body">
+            <h5 class="card-title">[[item.title]]</h5>
+            <p class="card-text">[[item.price]] UAH</p>
+            <p v-if="item.seller" class="card-text">
+              Продавец: [[item.seller]]
+            </p>
+            <button
+              href="#"
+              @click="delete_post(item.olx_id)"
+              class="btn btn-danger"
+            >
+              Удалить
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-else>
+    <button class="btn btn-primary" @click="refresh">Обновить</button>
+  </div>
+  <script>
+    new Vue({
+      el: "#app",
+      delimiters: ["[[", "]]"],
+      data: {
+        data: null,
+        order: null,
+      },
+      computed: {
+        items() {
+          return this.data
+            .map((item) => {
+              if (item.photo) {
+                item.photo = item.photo
+                  .replace("{width}", "640")
+                  .replace("{height}", "480");
+              }
+
+              return item;
+            })
+            .slice(5);
+        },
+      },
+      methods: {
+        refresh() {
+          fetch("{{ url_for('blog.refresh') }}")
+            .then((response) => response.json())
+            .then((data) => {
+              this.data = data.posts;
+            });
+        },
+        delete_post(id) {
+          let url = "{{ url_for('blog.delete_post', id=999) }}";
+          url = url.replace("999", id);
+          fetch(url, { method: "DELETE" });
+          this.data = this.data.filter((item) => item.olx_id !== id);
+        },
+        sort_posts() {
+          let url = "{{ url_for('blog.sort_posts', order='xxx') }}";
+
+          switch (this.order) {
+            case "desc":
+              this.order = "asc";
+              break;
+            case "asc":
+              this.order = "desc";
+              break;
+            default:
+              this.order = "asc";
+          }
+
+          url = url.replace("xxx", this.order);
+
+          fetch(url)
+            .then((response) => response.json())
+            .then((data) => {
+              this.data = data.posts;
+            });
+        },
+      },
+    });
+  </script>
+  {% endblock %}
+</div>
