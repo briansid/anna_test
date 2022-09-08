@@ -54,7 +54,7 @@ def generate_users():
         poster = Role.query.filter_by(name=item['role']).one()
         user.roles.append(poster)
         user.username = item['username']
-        user.password = bcrypt.generate_password_hash("password")
+        user.password = bcrypt.generate_password_hash("password").decode('utf8')
         users.append(user)
         try:
             db.session.add(user)
